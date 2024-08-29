@@ -1,11 +1,14 @@
-﻿@model List<Category>
+﻿@page
+@model EcomerceStore_Razor.Pages.Categories.IndexModel
+@{
+}
 <div class="container">
     <div class="row pt-4 pb-3">
         <div class="col-6">
             <h1 class="text-primary">Category List</h1>
         </div>
         <div class="col-6 text-end">
-            <a asp-controller="Category" asp-action="Create" class="btn btn-primary"> <i class="bi bi-plus-circle"></i> Add Category</a>
+            <a asp-page="/Categories/Create" class="btn btn-primary"> <i class="bi bi-plus-circle"></i> Add Category</a>
         </div>
     </div>
     <div class="row">
@@ -20,17 +23,17 @@
                 </thead>
 
                 <tbody>
-                    @foreach (var item in Model.OrderBy(u => u.DisplayOrder))
+                    @foreach (var item in Model.CategoryList.OrderBy(u => u.DisplayOrder))
                     {
                         <tr>
                             <td>@item.Name</td>
                             <td>@item.DisplayOrder</td>
                             <td>
                                 <div class="w-75 btn-group" role="group">
-                                    <a asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary mx-2">
+                                    <a asp-page="/Categories/Edit" asp-route-id="@item.Id" class="btn btn-primary mx-2">
                                         <i class="bi bi-pencil-square"></i> Edit
                                     </a>
-                                    <a asp-controller="Category" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger mx-2">
+                                    <a asp-page="/Categories/Delete" asp-route-id="@item.Id" class="btn btn-danger mx-2">
                                         <i class="bi bi-trash-fill"></i> Delete
                                     </a>
                                 </div>
@@ -45,3 +48,4 @@
     </div>
     
 </div>
+
