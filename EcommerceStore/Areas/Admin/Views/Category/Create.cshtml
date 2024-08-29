@@ -16,6 +16,7 @@
             <label asp-for="DisplayOrder" class="p-0"></label>
             <input asp-for="DisplayOrder" class="form-control" />
             <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+        </div>
         <div class="row">
             <div class="col-6 col-md-3">
                 <button type="submit" class="btn btn-primary form-control">Create</button>
@@ -24,6 +25,7 @@
                 <a asp-controller="Category" asp-action="Index" class="btn btn-secondary form-control">Full List</a>
             </div>
         </div>
+       
     </div>
 </form>
 @section Scripts{

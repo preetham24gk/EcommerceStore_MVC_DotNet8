@@ -10,7 +10,7 @@ namespace EcommerceStore.Models
 
         [Required(ErrorMessage = "Category Name is Required")]
         [MaxLength(50)]
-        [DisplayName(" Category Name")]
+        [DisplayName("Category Name")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Category Name is Required")]

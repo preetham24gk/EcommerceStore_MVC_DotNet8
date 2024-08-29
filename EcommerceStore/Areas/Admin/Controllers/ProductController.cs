@@ -1,63 +1,64 @@
-﻿using EcommerceStore.DataAccess.Data;
+﻿using EcommerceStore.DataAccess.Repository.IRepository;
 using EcommerceStore.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace EcommerceStore.Controllers
+namespace EcommerceStore.Areas.Admin.Controllers
 {
-    public class CategoryController : Controller
+    [Area("Admin")]
+    public class ProductController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        public CategoryController(ApplicationDbContext db)
+
+        private readonly IUnitofWork _unitOfWork;
+        public ProductController(IUnitofWork unitOfWork)
         {
-            _db = db;
-            
+            _unitOfWork = unitOfWork;
+
         }
         public IActionResult Index()
         {
-            List<Category> objCategoryList = _db.Categories.ToList();
-            return View(objCategoryList);
+            List<Product> productsList = _unitOfWork.Product.GetAll().ToList();
+            return View(productsList);
         }
-        public IActionResult Create() 
+
+        public IActionResult Create()
         {
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Category obj)
+        public IActionResult Create(Product obj)
         {
-            if (obj.Name == obj.DisplayOrder.ToString()) 
+            if (obj.Title == obj.Author)
             {
-                ModelState.AddModelError("name", "The DisplayOrder cannot exactly match the Name");
+                ModelState.AddModelError("title", "The DisplayOrder cannot exactly match the Name");
             }
             if (!ModelState.IsValid) { return View(obj); }
-            _db.Categories.Add(obj);
-            _db.SaveChanges();
-            TempData["success"] = "Category Created Successfully";
+            _unitOfWork.Product.Add(obj);
+            _unitOfWork.Save();
+            TempData["success"] = "Product Created Successfully";
             return RedirectToAction("Index");
-            
-        }
 
-        public IActionResult Edit( int? id)
+        }
+        public IActionResult Edit(int? id)
         {
-            if (id == null || id == 0) 
+            if (id == null || id == 0)
             {
                 return NotFound();
-            } 
-            Category? category = _db.Categories.Find(id);
+            }
+            Product? product = _unitOfWork.Product.Get(u => u.Id == id);
             //Category? category1 = _db.Categories.FirstOrDefault(u=>u.Id==id);
             //Category? category2 = _db.Categories.Where(u=>u.Id==id).FirstOrDefault();
-            if (category == null) 
+            if (product == null)
             {
                 return NotFound();
             }
-            return View(category);
+            return View(product);
         }
         [HttpPost]
-        public IActionResult Edit(Category obj)
+        public IActionResult Edit(Product obj)
         {
             if (!ModelState.IsValid) { return View(obj); }
-            _db.Categories.Update(obj);
-            _db.SaveChanges();
+            _unitOfWork.Product.Update(obj);
+            _unitOfWork.Save();
             TempData["success"] = "Category Updated Successfully";
             return RedirectToAction("Index");
 
@@ -69,27 +70,26 @@ namespace EcommerceStore.Controllers
             {
                 return NotFound();
             }
-            Category? category = _db.Categories.Find(id);
+            Product? product = _unitOfWork.Product.Get(u => u.Id == id);
             //Category? category1 = _db.Categories.FirstOrDefault(u=>u.Id==id);
             //Category? category2 = _db.Categories.Where(u=>u.Id==id).FirstOrDefault();
-            if (category == null)
+            if (product == null)
             {
                 return NotFound();
             }
-            return View(category);
+            return View(product);
         }
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {
-            Category? category = _db.Categories.Find(id);
-            if (category == null)
+            Product? product = _unitOfWork.Product.Get(u => u.Id == id);
+            if (product == null)
                 return NotFound();
-            _db.Categories.Remove(category);
-            _db.SaveChanges();
+            _unitOfWork.Product.Remove(product);
+            _unitOfWork.Save();
             TempData["success"] = "Category Deleted Successfully";
             return RedirectToAction("Index");
 
         }
-
     }
 }
