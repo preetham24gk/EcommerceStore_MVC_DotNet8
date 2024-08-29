@@ -1,6 +1,8 @@
 ﻿using EcommerceStore.DataAccess.Repository.IRepository;
 using EcommerceStore.Models;
+using EcommerceStore.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EcommerceStore.Areas.Admin.Controllers
 {
@@ -17,12 +19,24 @@ namespace EcommerceStore.Areas.Admin.Controllers
         public IActionResult Index()
         {
             List<Product> productsList = _unitOfWork.Product.GetAll().ToList();
+           
             return View(productsList);
         }
 
         public IActionResult Create()
         {
-            return View();
+
+            //ViewBag.CategoryList = CategoryList;
+            ProductVM productVM = new() 
+            {
+                CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
+                Product = new Product()
+            };
+            return View(productVM);
         }
         [HttpPost]
         public IActionResult Create(Product obj)
