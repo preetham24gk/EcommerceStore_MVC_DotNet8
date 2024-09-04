@@ -1,6 +1,8 @@
 ﻿using EcommerceStore.DataAccess.Repository.IRepository;
 using EcommerceStore.Models;
 using EcommerceStore.Models.ViewModels;
+using EcommerceStore.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Hosting;
@@ -9,6 +11,7 @@ using NuGet.ContentModel;
 namespace EcommerceStore.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class ProductController : Controller
     {
 
